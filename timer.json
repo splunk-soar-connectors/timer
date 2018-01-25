@@ -2,7 +2,7 @@
     "appid": "7f714055-3a13-4f99-9b18-56efe30a3cb6",
     "name": "Timer",
     "description": "This app will generate an empty event which can be used to kick off a playbook at scheduled intervals",
-    "type": "email",
+    "type": "generic",
     "product_vendor": "Phantom",
     "logo": "logo_phantom.svg",
     "logo_dark": "logo_phantom_dark.svg",
