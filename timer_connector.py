@@ -78,15 +78,7 @@ class TimerConnector(BaseConnector):
 
         container = {
             'name': event_name,
-            'artifacts': [
-                {
-                    'name': 'Artifact',
-                    'source_data_identifier': 0,
-                    'cef': {
-                        'ph': 'Phantom'
-                    }
-                }
-            ]
+            'run_automation': True
         }
 
         ret_val, message, container_id = self.save_container(container)
