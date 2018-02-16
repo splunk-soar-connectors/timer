@@ -18,10 +18,11 @@
     "app_wizard_version": "1.0.0",
     "configuration": {
         "event_name": {
-            "description": "Name of the event",
+            "description": "Name of the created event",
             "data_type": "string",
             "required": true,
-            "order": 0
+            "order": 0,
+            "default": "$label created on $now"
         }
     },
     "actions": [
