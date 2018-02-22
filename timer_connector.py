@@ -69,8 +69,10 @@ class TimerConnector(BaseConnector):
         event_name = self._format_event_name()
 
         self.save_progress("Event Name: {}".format(event_name))
+        self.save_progress("Test Connectivity Passed")
 
         return action_result.set_status(phantom.APP_SUCCESS)
+
 
     def _handle_on_poll(self, param):
         action_result = self.add_action_result(ActionResult(dict(param)))
