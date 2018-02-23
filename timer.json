@@ -1,0 +1,87 @@
+{
+    "appid": "7f714055-3a13-4f99-9b18-56efe30a3cb6",
+    "name": "Timer",
+    "description": "This app will generate an empty event which can be used to kick off a playbook at scheduled intervals",
+    "type": "generic",
+    "product_vendor": "Phantom",
+    "logo": "logo_phantom.svg",
+    "logo_dark": "logo_phantom_dark.svg",
+    "product_name": "Timer",
+    "product_version_regex": ".*",
+    "publisher": "Phantom",
+    "license": "Copyright (c) Phantom Cyber Corporation, 2018",
+    "app_version": "1.0.3",
+    "utctime_updated": "2018-02-22T01:46:27.000000Z",
+    "package_name": "phantom_timer",
+    "main_module": "timer_connector.pyc",
+    "min_phantom_version": "3.0.251",
+    "app_wizard_version": "1.0.0",
+    "configuration": {
+        "event_name": {
+            "description": "Name of the created event",
+            "data_type": "string",
+            "required": true,
+            "order": 0,
+            "default": "$label created on $now"
+        }
+    },
+    "actions": [
+        {
+            "action": "test connectivity",
+            "identifier": "test_connectivity",
+            "description": "Validate the asset configuration for connectivity using supplied configuration",
+            "verbose": "",
+            "type": "test",
+            "read_only": true,
+            "parameters": {},
+            "output": [],
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "on poll",
+            "identifier": "on_poll",
+            "description": "Create one empty event to kick off a playbook",
+            "type": "ingest",
+            "read_only": true,
+            "parameters": {
+                "start_time": {
+                    "description": "Parameter Ignored in this app",
+                    "data_type": "numeric",
+                    "required": false,
+                    "primary": false,
+                    "order": 0
+                },
+                "end_time": {
+                    "description": "Parameter Ignored in this app",
+                    "data_type": "numeric",
+                    "required": false,
+                    "primary": false,
+                    "order": 1
+                },
+                "container_id": {
+                    "description": "Parameter Ignored in this app",
+                    "data_type": "numeric",
+                    "required": false,
+                    "primary": false,
+                    "order": 2
+                },
+                "container_count": {
+                    "description": "Parameter Ignored in this app",
+                    "data_type": "numeric",
+                    "required": false,
+                    "primary": false,
+                    "order": 3
+                },
+                "artifact_count": {
+                    "description": "Parameter Ignored in this app",
+                    "data_type": "numeric",
+                    "required": false,
+                    "primary": false,
+                    "order": 4
+                }
+            },
+            "output": [],
+            "versions": "EQ(*)"
+        }
+    ]
+}
