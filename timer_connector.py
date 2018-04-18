@@ -21,6 +21,7 @@ from phantom.action_result import ActionResult
 # from timer_consts import *
 import re
 import json
+import pytz
 import requests
 import datetime
 
@@ -48,7 +49,7 @@ class TimerConnector(BaseConnector):
         config = self.get_config()
         event_name = config['event_name']
 
-        iso_now = datetime.datetime.now().isoformat()
+        iso_now = datetime.datetime.now(pytz.utc).isoformat()
         label_name = config.get('ingest', {}).get('container_label', '')
 
         event_name = re.sub(
