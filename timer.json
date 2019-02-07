@@ -9,12 +9,12 @@
     "product_name": "Timer",
     "product_version_regex": ".*",
     "publisher": "Phantom",
-    "license": "Copyright (c) Phantom Cyber Corporation, 2018",
+    "license": "Copyright (c) 2018-2019 Splunk Inc.",
     "app_version": "1.0.6",
     "utctime_updated": "2018-12-07T01:37:40.000000Z",
     "package_name": "phantom_timer",
     "main_module": "timer_connector.pyc",
-    "min_phantom_version": "3.0.251",
+    "min_phantom_version": "4.0.1068",
     "app_wizard_version": "1.0.0",
     "configuration": {
         "event_name": {
@@ -23,6 +23,36 @@
             "required": true,
             "order": 0,
             "default": "$label created on $now"
+        },
+        "placeholder": {
+            "description": "Placeholder",
+            "data_type": "ph",
+            "order": 1
+        },
+        "severity": {
+            "description": "Severity of the created event",
+            "data_type": "string",
+            "optional": true,
+            "value_list": [
+                "high",
+                "medium",
+                "low"
+            ],
+            "order": 2,
+            "default": "medium"
+        },
+        "sensitivity": {
+            "description": "Sensitivity of the created event",
+            "data_type": "string",
+            "optional": true,
+            "value_list": [
+                "white",
+                "green",
+                "amber",
+                "red"
+            ],
+            "order": 3,
+            "default": "amber"
         }
     },
     "actions": [

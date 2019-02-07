@@ -1,16 +1,8 @@
-# --
 # File: timer_connector.py
+# Copyright (c) 2018-2019 Splunk Inc.
 #
-# Copyright (c) Phantom Cyber Corporation, 2018
-#
-# This unpublished material is proprietary to Phantom Cyber.
-# All rights reserved. The methods and
-# techniques described herein are considered trade secrets
-# and/or confidential. Reproduction or distribution, in whole
-# or in part, is forbidden except by express written permission
-# of Phantom Cyber.
-#
-# --
+# SPLUNK CONFIDENTIAL - Use or disclosure of this material in whole or in part
+# without a valid written license from Splunk Inc. is PROHIBITED.
 
 # Phantom App imports
 import phantom.app as phantom
@@ -39,6 +31,9 @@ class TimerConnector(BaseConnector):
 
     def initialize(self):
         self._state = self.load_state()
+        config = self.get_config()
+        self._severity = config.get('severity', 'medium')
+        self._sensitivity = config.get('sensitivity', 'amber')
         return phantom.APP_SUCCESS
 
     def finalize(self):
@@ -74,14 +69,15 @@ class TimerConnector(BaseConnector):
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
-
     def _handle_on_poll(self, param):
         action_result = self.add_action_result(ActionResult(dict(param)))
         event_name = self._format_event_name()
 
         container = {
             'name': event_name,
-            'run_automation': True
+            'run_automation': True,
+            'severity': self._severity,
+            'sensitivity': self._sensitivity
         }
 
         ret_val, message, container_id = self.save_container(container)
