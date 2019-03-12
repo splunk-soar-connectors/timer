@@ -8,7 +8,7 @@
     "logo_dark": "logo_phantom_dark.svg",
     "product_name": "Timer",
     "product_version_regex": ".*",
-    "publisher": "Phantom",
+    "publisher": "Splunk",
     "license": "Copyright (c) 2018-2019 Splunk Inc.",
     "app_version": "1.0.6",
     "utctime_updated": "2018-12-07T01:37:40.000000Z",
