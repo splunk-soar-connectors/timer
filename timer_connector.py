@@ -46,6 +46,7 @@ class TimerConnector(BaseConnector):
 
         iso_now = datetime.datetime.now(pytz.utc).isoformat()
         label_name = config.get('ingest', {}).get('container_label', '')
+        self._iso_now = iso_now
 
         event_name = re.sub(
             r'(^|[^0-9a-zA-Z]+)(\$now)($|[^0-9a-zA-Z]+)',
@@ -73,11 +74,22 @@ class TimerConnector(BaseConnector):
         action_result = self.add_action_result(ActionResult(dict(param)))
         event_name = self._format_event_name()
 
+        if self.get_config().get("create_artifact"):
+            artifacts = [{
+                'name': "Timer Artifact",
+                'severity': self._severity,
+                'cef': {
+                    'time': str(self._iso_now),
+                }
+            }]
+        else:
+            artifacts = []
         container = {
             'name': event_name,
             'run_automation': True,
             'severity': self._severity,
-            'sensitivity': self._sensitivity
+            'sensitivity': self._sensitivity,
+            'artifacts': artifacts,
         }
 
         ret_val, message, container_id = self.save_container(container)

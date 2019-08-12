@@ -53,6 +53,12 @@
             ],
             "order": 3,
             "default": "amber"
+        },
+        "create_artifact": {
+            "description": "Create timer artifact",
+            "data_type": "boolean",
+            "order": 4,
+            "default": false
         }
     },
     "actions": [
