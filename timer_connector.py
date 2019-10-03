@@ -73,33 +73,94 @@ class TimerConnector(BaseConnector):
     def _handle_on_poll(self, param):
         action_result = self.add_action_result(ActionResult(dict(param)))
         event_name = self._format_event_name()
+        create_artifact_instead = self.get_config().get("create_artifact_instead")
+        create_artifact = True if create_artifact_instead else self.get_config().get("create_artifact")
+        existing_event_id = self.get_config().get("existing_event_id")
 
-        if self.get_config().get("create_artifact"):
+        # configured existing_event_id takes precedence
+        if existing_event_id:
+            if 'existing_event_id' in self._state:
+                self._state['existing_event_id']
+
+        # if existing_event_id was not provided, use the saved event if available otherwise create new one
+        if create_artifact_instead and not existing_event_id:
+            existing_event_id = self._state.get('existing_event_id')
+
+        if create_artifact:
             artifacts = [{
-                'name': "Timer Artifact",
+                'name': event_name if create_artifact_instead else "Timer Artifact",
                 'severity': self._severity,
                 'cef': {
                     'time': str(self._iso_now),
-                }
+                },
+                'run_automation': True,
             }]
         else:
             artifacts = []
-        container = {
-            'name': event_name,
-            'run_automation': True,
-            'severity': self._severity,
-            'sensitivity': self._sensitivity,
-            'artifacts': artifacts,
-        }
 
-        ret_val, message, container_id = self.save_container(container)
-        if phantom.is_fail(ret_val):
-            return action_result.set_status(
-                phantom.APP_ERROR,
-                "Unable to create container: {}".format(message)
-            )
+        if not existing_event_id:
+            container = {
+                'name': event_name,
+                'run_automation': True,
+                'severity': self._severity,
+                'sensitivity': self._sensitivity,
+                'artifacts': artifacts,
+                'run_automation': False,
+            }
 
-        return action_result.set_status(phantom.APP_SUCCESS, "Created Container")
+            ret_val, message, container_id = self.save_container(container)
+            if phantom.is_fail(ret_val):
+                return action_result.set_status(
+                    phantom.APP_ERROR,
+                    "Unable to create container: {}".format(message)
+                )
+
+            if create_artifact_instead and not existing_event_id:
+                self._state['existing_event_id'] = container_id
+
+            return action_result.set_status(phantom.APP_SUCCESS, "Created Container")
+
+        else:
+            print(artifacts[0].update({'container_id': existing_event_id}))
+            artifacts[0].update({'container_id': existing_event_id})
+            ret_val, message, artifact_id = self.save_artifact(artifacts[0])
+            if phantom.is_fail(ret_val):
+                return action_result.set_status(
+                    phantom.APP_ERROR,
+                    "Unable to create artifact: {}".format(message)
+                )
+
+            return action_result.set_status(phantom.APP_SUCCESS, "Created artifact")
+
+    def _handle_manage_timer(self, param):
+        action_result = self.add_action_result(ActionResult(dict(param)))
+        action = param['action']
+        event_id = param.get('existing_event_id')
+
+        if self.get_config().get("existing_event_id"):
+            return action_result.set_status(phantom.APP_SUCCESS,"Cannot get/set/clear saved existing event id when configured into asset")
+
+        if action == "get_saved_event_id":
+            event_id = self._state['existing_event_id']
+            action_result.update_summary({'event_id': event_id})
+            action_result.add_data({'event_id': event_id})
+            return action_result.set_status(phantom.APP_SUCCESS)
+
+        elif action == "set_saved_event_id":
+            if event_id:
+                self._state['existing_event_id'] = event_id
+                return action_result.set_status(phantom.APP_SUCCESS)
+
+            else:
+                return action_result.set_status(phantom.APP_ERROR,"Error: event_id not provided")
+
+        elif action == "clear_saved_event_id":
+                if 'existing_event_id' in self._state:
+                    del self._state['existing_event_id']
+                return action_result.set_status(phantom.APP_SUCCESS)
+            
+        return action_result.set_status(phantom.APP_ERROR, "Error: unknown action; {}".format(action))
+
 
     def handle_action(self, param):
 
@@ -112,8 +173,12 @@ class TimerConnector(BaseConnector):
 
         if action_id == 'on_poll':
             ret_val = self._handle_on_poll(param)
+
         elif action_id == 'test_connectivity':
             ret_val = self._handle_test_connectivty(param)
+
+        elif action_id == 'manage_timer':
+            ret_val = self._handle_manage_timer(param)
 
         return ret_val
 

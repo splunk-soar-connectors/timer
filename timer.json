@@ -24,10 +24,27 @@
             "order": 0,
             "default": "$label created on $now"
         },
-        "placeholder": {
-            "description": "Placeholder",
-            "data_type": "ph",
+        "create_artifact_instead": {
+            "description": "Create artifact instead of event",
+            "verbose": "Instead of creating a new event on interval, add an new artifact to an existing event. All event settings wil be applied to artifact instead",
+            "data_type": "boolean",
+            "required": false,
+            "default": false,
             "order": 1
+        },
+        "existing_event_id": {
+            "description": "Create artifact in existing event",
+            "verbose": "If \"create_artifact_instead\" is set and existing_event_id is provided, add new artifacts to the provided existing event. If not not provided; at the first interval, the artifact will be added to a newly generated event which will be reused at the next interval",
+            "data_type": "numeric",
+            "required": false,
+            "default": false,
+            "order": 2
+        },
+        "create_artifact": {
+            "description": "If creating event, add artifact to event",
+            "data_type": "boolean",
+            "order": 3,
+            "default": false
         },
         "severity": {
             "description": "Severity of the created event",
@@ -38,7 +55,7 @@
                 "medium",
                 "low"
             ],
-            "order": 2,
+            "order": 5,
             "default": "medium"
         },
         "sensitivity": {
@@ -51,14 +68,8 @@
                 "amber",
                 "red"
             ],
-            "order": 3,
+            "order": 6,
             "default": "amber"
-        },
-        "create_artifact": {
-            "description": "Create timer artifact",
-            "data_type": "boolean",
-            "order": 4,
-            "default": false
         }
     },
     "actions": [
@@ -71,6 +82,82 @@
             "read_only": true,
             "parameters": {},
             "output": [],
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "manage timer",
+            "identifier": "manage_timer",
+            "description": "manage timer app",
+            "type": "generic",
+            "read_only": false,
+            "parameters": {
+                "action": {
+                    "description": "management action to run",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": false,
+                    "default": "get_saved_event_id",
+                    "value_list": [
+                        "get_saved_event_id",
+                        "set_saved_event_id",
+                        "clear_saved_event_id"
+                    ],
+                    "order": 0
+                },
+                "existing_event_id": {
+                    "description": "If \"create_artifact_instead\" is set and existing_event_id is provided, add new artifacts to the provided existing event. If not not provided; at the first interval, the artifact will be added to a newly generated event which will be reused at the next interval",
+                    "data_type": "numeric",
+                    "required": false,
+                    "default": false,
+                    "order": 1
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.data.*.event_id",
+                    "data_type": "numeric",
+                    "column_name": "event_id",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.parameter.existing_event_id",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.action",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "column_name": "status",
+                    "column_order": 0
+                }
+            ],
+            "render": {
+                "type": "table",
+                "title": "timer"
+            },
             "versions": "EQ(*)"
         },
         {
