@@ -13,8 +13,9 @@
     "app_version": "1.0.7",
     "utctime_updated": "2019-03-13T02:08:15.000000Z",
     "package_name": "phantom_timer",
-    "main_module": "timer_connector.pyc",
-    "min_phantom_version": "4.0.1068",
+    "main_module": "timer_connector.py",
+    "min_phantom_version": "4.8.24304",
+    "python_version": "3",
     "app_wizard_version": "1.0.0",
     "configuration": {
         "event_name": {
