@@ -4,18 +4,21 @@
     "description": "This app will generate an empty event which can be used to kick off a playbook at scheduled intervals",
     "type": "generic",
     "product_vendor": "Phantom",
-    "logo": "logo_phantom.svg",
-    "logo_dark": "logo_phantom_dark.svg",
+    "logo": "logo_timer.svg",
+    "logo_dark": "logo_timer_dark.svg",
     "product_name": "Timer",
     "product_version_regex": ".*",
     "publisher": "Splunk",
-    "license": "Copyright (c) 2018-2019 Splunk Inc.",
-    "app_version": "1.0.7",
+    "license": "Copyright (c) 2018-2020 Splunk Inc.",
+    "app_version": "2.0.0",
     "utctime_updated": "2019-03-13T02:08:15.000000Z",
     "package_name": "phantom_timer",
     "main_module": "timer_connector.py",
     "min_phantom_version": "4.8.24304",
     "python_version": "3",
+    "latest_tested_versions": [
+        "Phantom 4.9 on 11/24/2020"
+    ],
     "app_wizard_version": "1.0.0",
     "configuration": {
         "event_name": {
@@ -34,11 +37,6 @@
             "description": "Severity of the created event",
             "data_type": "string",
             "optional": true,
-            "value_list": [
-                "high",
-                "medium",
-                "low"
-            ],
             "order": 2,
             "default": "medium"
         },
@@ -61,7 +59,6 @@
             "action": "test connectivity",
             "identifier": "test_connectivity",
             "description": "Validate the asset configuration for connectivity using supplied configuration",
-            "verbose": "",
             "type": "test",
             "read_only": true,
             "parameters": {},
@@ -78,36 +75,26 @@
                 "start_time": {
                     "description": "Parameter Ignored in this app",
                     "data_type": "numeric",
-                    "required": false,
-                    "primary": false,
                     "order": 0
                 },
                 "end_time": {
                     "description": "Parameter Ignored in this app",
                     "data_type": "numeric",
-                    "required": false,
-                    "primary": false,
                     "order": 1
                 },
                 "container_id": {
                     "description": "Parameter Ignored in this app",
                     "data_type": "numeric",
-                    "required": false,
-                    "primary": false,
                     "order": 2
                 },
                 "container_count": {
                     "description": "Parameter Ignored in this app",
                     "data_type": "numeric",
-                    "required": false,
-                    "primary": false,
                     "order": 3
                 },
                 "artifact_count": {
                     "description": "Parameter Ignored in this app",
                     "data_type": "numeric",
-                    "required": false,
-                    "primary": false,
                     "order": 4
                 }
             },
