@@ -54,7 +54,7 @@ class TimerConnector(BaseConnector):
 
         self._state = self.load_state()
         config = self.get_config()
-        self._severity = self._handle_py_ver_compat_for_input_str(config.get('severity', 'medium'))
+        self._severity = config.get('severity', 'medium')
         self._sensitivity = config.get('sensitivity', 'amber')
         return phantom.APP_SUCCESS
 
