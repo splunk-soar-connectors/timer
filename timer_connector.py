@@ -16,8 +16,6 @@ import json
 import pytz
 import requests
 import datetime
-from bs4 import UnicodeDammit
-import sys
 
 
 class RetVal(tuple):
@@ -30,28 +28,8 @@ class TimerConnector(BaseConnector):
     def __init__(self):
         super(TimerConnector, self).__init__()
         self._state = None
-        self._python_version = None
-
-    def _handle_py_ver_compat_for_input_str(self, input_str):
-        """
-        This method returns the encoded|original string based on the Python version.
-        :param input_str: Input string to be processed
-        :return: input_str (Processed input string based on following logic 'input_str - Python 3; encoded input_str - Python 2')
-        """
-        try:
-            if input_str and self._python_version < 3:
-                input_str = UnicodeDammit(input_str).unicode_markup.encode('utf-8')
-        except:
-            self.debug_print("Error occurred while handling python 2to3 compatibility for the input string")
-
-        return input_str
 
     def initialize(self):
-        try:
-            self._python_version = int(sys.version_info[0])
-        except:
-            return self.set_status(phantom.APP_ERROR, "Error occurred while getting the Phantom server's Python major version.")
-
         self._state = self.load_state()
         config = self.get_config()
         self._severity = config.get('severity', 'medium')
@@ -64,7 +42,7 @@ class TimerConnector(BaseConnector):
 
     def _format_event_name(self):
         config = self.get_config()
-        event_name = self._handle_py_ver_compat_for_input_str(config['event_name'])
+        event_name = config['event_name']
 
         iso_now = datetime.datetime.now(pytz.utc).isoformat()
         label_name = config.get('ingest', {}).get('container_label', '')
@@ -84,14 +62,11 @@ class TimerConnector(BaseConnector):
 
     def _handle_test_connectivty(self, param):
         action_result = self.add_action_result(ActionResult(dict(param)))
-        event_name = self._format_event_name()
 
-        self.save_progress("Event Name: {}".format(event_name))
-        self.save_progress("Creating container for Test Connectivity")
+        self.save_progress("Creating container for Test Connectivity with name 'Container for test connectivity'")
 
-        iso_now = datetime.datetime.now(pytz.utc).isoformat()
         container = {
-            'name': 'Container for test connectivity {}'.format(iso_now),
+            'name': 'Container for test connectivity',
             'run_automation': True,
             'severity': self._severity,
             'sensitivity': self._sensitivity
@@ -148,6 +123,7 @@ if __name__ == '__main__':
 
     import pudb
     import argparse
+    import sys
 
     pudb.set_trace()
 
