@@ -3,18 +3,22 @@
     "name": "Timer",
     "description": "This app will generate an empty event which can be used to kick off a playbook at scheduled intervals",
     "type": "generic",
-    "product_vendor": "Phantom",
-    "logo": "logo_phantom.svg",
-    "logo_dark": "logo_phantom_dark.svg",
+    "product_vendor": "Splunk",
+    "logo": "logo_splunk.svg",
+    "logo_dark": "logo_splunk_dark.svg",
     "product_name": "Timer",
     "product_version_regex": ".*",
-    "publisher": "Phantom",
-    "license": "Copyright (c) Phantom Cyber Corporation, 2018",
-    "app_version": "1.0.3",
-    "utctime_updated": "2018-02-22T01:46:27.000000Z",
+    "publisher": "Splunk",
+    "license": "Copyright (c) 2018-2020 Splunk Inc.",
+    "app_version": "2.0.2",
+    "utctime_updated": "2020-12-15T14:09:24.000000Z",
     "package_name": "phantom_timer",
-    "main_module": "timer_connector.pyc",
-    "min_phantom_version": "3.0.251",
+    "main_module": "timer_connector.py",
+    "min_phantom_version": "4.8.24304",
+    "python_version": "3",
+    "latest_tested_versions": [
+        ""
+    ],
     "app_wizard_version": "1.0.0",
     "configuration": {
         "event_name": {
@@ -23,6 +27,31 @@
             "required": true,
             "order": 0,
             "default": "$label created on $now"
+        },
+        "placeholder": {
+            "description": "Placeholder",
+            "data_type": "ph",
+            "order": 1
+        },
+        "severity": {
+            "description": "Severity of the created event",
+            "data_type": "string",
+            "optional": true,
+            "order": 2,
+            "default": "medium"
+        },
+        "sensitivity": {
+            "description": "Sensitivity of the created event",
+            "data_type": "string",
+            "optional": true,
+            "value_list": [
+                "white",
+                "green",
+                "amber",
+                "red"
+            ],
+            "order": 3,
+            "default": "amber"
         }
     },
     "actions": [
@@ -30,7 +59,6 @@
             "action": "test connectivity",
             "identifier": "test_connectivity",
             "description": "Validate the asset configuration for connectivity using supplied configuration",
-            "verbose": "",
             "type": "test",
             "read_only": true,
             "parameters": {},
@@ -47,36 +75,26 @@
                 "start_time": {
                     "description": "Parameter Ignored in this app",
                     "data_type": "numeric",
-                    "required": false,
-                    "primary": false,
                     "order": 0
                 },
                 "end_time": {
                     "description": "Parameter Ignored in this app",
                     "data_type": "numeric",
-                    "required": false,
-                    "primary": false,
                     "order": 1
                 },
                 "container_id": {
                     "description": "Parameter Ignored in this app",
                     "data_type": "numeric",
-                    "required": false,
-                    "primary": false,
                     "order": 2
                 },
                 "container_count": {
                     "description": "Parameter Ignored in this app",
                     "data_type": "numeric",
-                    "required": false,
-                    "primary": false,
                     "order": 3
                 },
                 "artifact_count": {
                     "description": "Parameter Ignored in this app",
                     "data_type": "numeric",
-                    "required": false,
-                    "primary": false,
                     "order": 4
                 }
             },

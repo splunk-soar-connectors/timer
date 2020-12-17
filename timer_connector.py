@@ -1,16 +1,8 @@
-# --
 # File: timer_connector.py
+# Copyright (c) 2018-2020 Splunk Inc.
 #
-# Copyright (c) Phantom Cyber Corporation, 2018
-#
-# This unpublished material is proprietary to Phantom Cyber.
-# All rights reserved. The methods and
-# techniques described herein are considered trade secrets
-# and/or confidential. Reproduction or distribution, in whole
-# or in part, is forbidden except by express written permission
-# of Phantom Cyber.
-#
-# --
+# SPLUNK CONFIDENTIAL - Use or disclosure of this material in whole or in part
+# without a valid written license from Splunk Inc. is PROHIBITED.
 
 # Phantom App imports
 import phantom.app as phantom
@@ -21,8 +13,11 @@ from phantom.action_result import ActionResult
 # from timer_consts import *
 import re
 import json
+import pytz
 import requests
 import datetime
+from bs4 import UnicodeDammit
+import sys
 
 
 class RetVal(tuple):
@@ -35,9 +30,32 @@ class TimerConnector(BaseConnector):
     def __init__(self):
         super(TimerConnector, self).__init__()
         self._state = None
+        self._python_version = None
+
+    def _handle_py_ver_compat_for_input_str(self, input_str):
+        """
+        This method returns the encoded|original string based on the Python version.
+        :param input_str: Input string to be processed
+        :return: input_str (Processed input string based on following logic 'input_str - Python 3; encoded input_str - Python 2')
+        """
+        try:
+            if input_str and self._python_version < 3:
+                input_str = UnicodeDammit(input_str).unicode_markup.encode('utf-8')
+        except:
+            self.debug_print("Error occurred while handling python 2to3 compatibility for the input string")
+
+        return input_str
 
     def initialize(self):
+        try:
+            self._python_version = int(sys.version_info[0])
+        except:
+            return self.set_status(phantom.APP_ERROR, "Error occurred while getting the Phantom server's Python major version.")
+
         self._state = self.load_state()
+        config = self.get_config()
+        self._severity = config.get('severity', 'medium')
+        self._sensitivity = config.get('sensitivity', 'amber')
         return phantom.APP_SUCCESS
 
     def finalize(self):
@@ -46,9 +64,9 @@ class TimerConnector(BaseConnector):
 
     def _format_event_name(self):
         config = self.get_config()
-        event_name = config['event_name']
+        event_name = self._handle_py_ver_compat_for_input_str(config['event_name'])
 
-        iso_now = datetime.datetime.now().isoformat()
+        iso_now = datetime.datetime.now(pytz.utc).isoformat()
         label_name = config.get('ingest', {}).get('container_label', '')
 
         event_name = re.sub(
@@ -58,7 +76,7 @@ class TimerConnector(BaseConnector):
         )
         event_name = re.sub(
             r'(^|[^0-9a-zA-Z]+)(\$label)($|[^0-9a-zA-Z]+)',
-            r'\g<1>{}\g<3>'.format(label_name),
+            r'\g<1>{}\g<3>'.format(self._handle_py_ver_compat_for_input_str(label_name)),
             event_name
         )
 
@@ -68,11 +86,12 @@ class TimerConnector(BaseConnector):
         action_result = self.add_action_result(ActionResult(dict(param)))
         event_name = self._format_event_name()
 
+        # no suitable investigative function found for using in test connectivity, hence, keeping it as it is
         self.save_progress("Event Name: {}".format(event_name))
+
         self.save_progress("Test Connectivity Passed")
 
         return action_result.set_status(phantom.APP_SUCCESS)
-
 
     def _handle_on_poll(self, param):
         action_result = self.add_action_result(ActionResult(dict(param)))
@@ -80,7 +99,9 @@ class TimerConnector(BaseConnector):
 
         container = {
             'name': event_name,
-            'run_automation': True
+            'run_automation': True,
+            'severity': self._severity,
+            'sensitivity': self._sensitivity
         }
 
         ret_val, message, container_id = self.save_container(container)
@@ -111,7 +132,6 @@ class TimerConnector(BaseConnector):
 
 if __name__ == '__main__':
 
-    import sys
     import pudb
     import argparse
 
@@ -137,7 +157,7 @@ if __name__ == '__main__':
 
     if (username and password):
         try:
-            print ("Accessing the Login page")
+            print("Accessing the Login page")
             r = requests.get("https://127.0.0.1/login", verify=False)
             csrftoken = r.cookies['csrftoken']
 
@@ -150,15 +170,15 @@ if __name__ == '__main__':
             headers['Cookie'] = 'csrftoken=' + csrftoken
             headers['Referer'] = 'https://127.0.0.1/login'
 
-            print ("Logging into Platform to get the session id")
+            print("Logging into Platform to get the session id")
             r2 = requests.post("https://127.0.0.1/login", verify=False, data=data, headers=headers)
             session_id = r2.cookies['sessionid']
         except Exception as e:
-            print ("Unable to get session id from the platfrom. Error: " + str(e))
+            print("Unable to get session id from the platfrom. Error: " + str(e))
             exit(1)
 
     if (len(sys.argv) < 2):
-        print "No test json specified as input"
+        print("No test json specified as input")
         exit(0)
 
     with open(sys.argv[1]) as f:
@@ -173,6 +193,6 @@ if __name__ == '__main__':
             in_json['user_session_token'] = session_id
 
         ret_val = connector._handle_action(json.dumps(in_json), None)
-        print (json.dumps(json.loads(ret_val), indent=4))
+        print(json.dumps(json.loads(ret_val), indent=4))
 
     exit(0)
