@@ -3,7 +3,7 @@
     "name": "Timer",
     "description": "This app will generate an empty event which can be used to kick off a playbook at scheduled intervals",
     "type": "generic",
-    "product_vendor": "Splunk",
+    "product_vendor": "Phantom",
     "logo": "logo_splunk.svg",
     "logo_dark": "logo_splunk_dark.svg",
     "product_name": "Timer",
