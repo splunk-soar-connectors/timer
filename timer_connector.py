@@ -14,20 +14,17 @@
 # and limitations under the License.
 #
 #
-# Phantom App imports
-import phantom.app as phantom
-from phantom.base_connector import BaseConnector
-from phantom.action_result import ActionResult
-
-# Usage of the consts file is recommended
-# from timer_consts import *
-import re
+import datetime
 import json
+import re
+import sys
+
+import phantom.app as phantom
 import pytz
 import requests
-import datetime
 from bs4 import UnicodeDammit
-import sys
+from phantom.action_result import ActionResult
+from phantom.base_connector import BaseConnector
 
 
 class RetVal(tuple):
@@ -142,8 +139,9 @@ class TimerConnector(BaseConnector):
 
 if __name__ == '__main__':
 
-    import pudb
     import argparse
+
+    import pudb
 
     pudb.set_trace()
 
