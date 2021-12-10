@@ -10,13 +10,13 @@
     "product_version_regex": ".*",
     "publisher": "Splunk",
     "license": "Copyright (c) 2018-2021 Splunk Inc.",
-    "app_version": "2.0.12",
-    "utctime_updated": "2021-01-14T23:00:27.000000Z",
+    "app_version": "2.0.13",
+    "utctime_updated": "2021-12-10T21:00:54.000000Z",
     "package_name": "phantom_timer",
     "main_module": "timer_connector.py",
     "min_phantom_version": "4.9.39220",
     "python_version": "3",
-    "fips_compliant":true,
+    "fips_compliant": true,
     "latest_tested_versions": [
         ""
     ],
