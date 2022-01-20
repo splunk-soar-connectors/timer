@@ -2,7 +2,7 @@
 # Timer
 
 Publisher: Splunk  
-Connector Version: 2\.0\.13  
+Connector Version: 2\.0\.15  
 Product Vendor: Phantom  
 Product Name: Timer  
 Product Version Supported (regex): "\.\*"  
@@ -10,7 +10,7 @@ Minimum Product Version: 4\.9\.39220
 
 This app will generate an empty event which can be used to kick off a playbook at scheduled intervals
 
-[comment]: # " File: readme.md"
+[comment]: # " File: README.md"
 [comment]: # "  Copyright (c) 2018-2022 Splunk Inc."
 [comment]: # ""
 [comment]: # "Licensed under the Apache License, Version 2.0 (the 'License');"
