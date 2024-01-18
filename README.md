@@ -11,7 +11,7 @@ Minimum Product Version: 4.9.39220
 This app will generate an empty event which can be used to kick off a playbook at scheduled intervals
 
 [comment]: # " File: README.md"
-[comment]: # "  Copyright (c) 2018-2022 Splunk Inc."
+[comment]: # "  Copyright (c) 2018-2024 Splunk Inc."
 [comment]: # ""
 [comment]: # "Licensed under the Apache License, Version 2.0 (the 'License');"
 [comment]: # "you may not use this file except in compliance with the License."
