@@ -89,7 +89,7 @@ class TimerConnector(BaseConnector):
 
         return event_name
 
-    def _handle_test_connectivty(self, param):
+    def _handle_test_connectivity(self, param):
         action_result = self.add_action_result(ActionResult(dict(param)))
         event_name = self._format_event_name()
 
@@ -132,7 +132,7 @@ class TimerConnector(BaseConnector):
         if action_id == 'on_poll':
             ret_val = self._handle_on_poll(param)
         elif action_id == 'test_connectivity':
-            ret_val = self._handle_test_connectivty(param)
+            ret_val = self._handle_test_connectivity(param)
 
         return ret_val
 
