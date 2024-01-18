@@ -110,7 +110,7 @@ class TimerConnector(BaseConnector):
             'severity': self._severity,
             'sensitivity': self._sensitivity
         }
-
+        self.save_progress("saving the container")
         ret_val, message, container_id = self.save_container(container)
         if phantom.is_fail(ret_val):
             return action_result.set_status(
