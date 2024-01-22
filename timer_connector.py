@@ -1,6 +1,6 @@
 # File: timer_connector.py
 #
-# Copyright (c) 2018-2022 Splunk Inc.
+# Copyright (c) 2018-2024 Splunk Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -89,7 +89,7 @@ class TimerConnector(BaseConnector):
 
         return event_name
 
-    def _handle_test_connectivty(self, param):
+    def _handle_test_connectivity(self, param):
         action_result = self.add_action_result(ActionResult(dict(param)))
         event_name = self._format_event_name()
 
@@ -110,7 +110,7 @@ class TimerConnector(BaseConnector):
             'severity': self._severity,
             'sensitivity': self._sensitivity
         }
-
+        self.save_progress("saving the container")
         ret_val, message, container_id = self.save_container(container)
         if phantom.is_fail(ret_val):
             return action_result.set_status(
@@ -132,7 +132,7 @@ class TimerConnector(BaseConnector):
         if action_id == 'on_poll':
             ret_val = self._handle_on_poll(param)
         elif action_id == 'test_connectivity':
-            ret_val = self._handle_test_connectivty(param)
+            ret_val = self._handle_test_connectivity(param)
 
         return ret_val
 
