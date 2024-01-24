@@ -2,16 +2,16 @@
 # Timer
 
 Publisher: Splunk  
-Connector Version: 2\.0\.15  
+Connector Version: 2.0.16  
 Product Vendor: Phantom  
 Product Name: Timer  
-Product Version Supported (regex): "\.\*"  
-Minimum Product Version: 4\.9\.39220  
+Product Version Supported (regex): ".\*"  
+Minimum Product Version: 4.9.39220  
 
 This app will generate an empty event which can be used to kick off a playbook at scheduled intervals
 
 [comment]: # " File: README.md"
-[comment]: # "  Copyright (c) 2018-2022 Splunk Inc."
+[comment]: # "  Copyright (c) 2018-2024 Splunk Inc."
 [comment]: # ""
 [comment]: # "Licensed under the Apache License, Version 2.0 (the 'License');"
 [comment]: # "you may not use this file except in compliance with the License."
@@ -42,7 +42,7 @@ The below configuration variables are required for this Connector to operate.  T
 
 VARIABLE | REQUIRED | TYPE | DESCRIPTION
 -------- | -------- | ---- | -----------
-**event\_name** |  required  | string | Name of the created event
+**event_name** |  required  | string | Name of the created event
 **placeholder** |  optional  | ph | Placeholder
 **severity** |  optional  | string | Severity of the created event
 **sensitivity** |  optional  | string | Sensitivity of the created event
@@ -72,11 +72,11 @@ Read only: **True**
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**start\_time** |  optional  | Parameter Ignored in this app | numeric | 
-**end\_time** |  optional  | Parameter Ignored in this app | numeric | 
-**container\_id** |  optional  | Parameter Ignored in this app | numeric | 
-**container\_count** |  optional  | Parameter Ignored in this app | numeric | 
-**artifact\_count** |  optional  | Parameter Ignored in this app | numeric | 
+**start_time** |  optional  | Parameter Ignored in this app | numeric | 
+**end_time** |  optional  | Parameter Ignored in this app | numeric | 
+**container_id** |  optional  | Parameter Ignored in this app | numeric | 
+**container_count** |  optional  | Parameter Ignored in this app | numeric | 
+**artifact_count** |  optional  | Parameter Ignored in this app | numeric | 
 
 #### Action Output
 No Output
