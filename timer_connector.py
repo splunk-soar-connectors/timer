@@ -1,6 +1,6 @@
 # File: timer_connector.py
 #
-# Copyright (c) 2018-2024 Splunk Inc.
+# Copyright (c) 2018-2025 Splunk Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -33,9 +33,8 @@ class RetVal(tuple):
 
 
 class TimerConnector(BaseConnector):
-
     def __init__(self):
-        super(TimerConnector, self).__init__()
+        super().__init__()
         self._state = None
         self._python_version = None
 
@@ -47,7 +46,7 @@ class TimerConnector(BaseConnector):
         """
         try:
             if input_str and self._python_version < 3:
-                input_str = UnicodeDammit(input_str).unicode_markup.encode('utf-8')
+                input_str = UnicodeDammit(input_str).unicode_markup.encode("utf-8")
         except:
             self.debug_print("Error occurred while handling python 2to3 compatibility for the input string")
 
@@ -61,8 +60,8 @@ class TimerConnector(BaseConnector):
 
         self._state = self.load_state()
         config = self.get_config()
-        self._severity = config.get('severity', 'medium')
-        self._sensitivity = config.get('sensitivity', 'amber')
+        self._severity = config.get("severity", "medium")
+        self._sensitivity = config.get("sensitivity", "amber")
         return phantom.APP_SUCCESS
 
     def finalize(self):
@@ -71,20 +70,14 @@ class TimerConnector(BaseConnector):
 
     def _format_event_name(self):
         config = self.get_config()
-        event_name = self._handle_py_ver_compat_for_input_str(config['event_name'])
+        event_name = self._handle_py_ver_compat_for_input_str(config["event_name"])
 
         iso_now = datetime.datetime.now(pytz.utc).isoformat()
-        label_name = config.get('ingest', {}).get('container_label', '')
+        label_name = config.get("ingest", {}).get("container_label", "")
 
+        event_name = re.sub(r"(^|[^0-9a-zA-Z]+)(\$now)($|[^0-9a-zA-Z]+)", rf"\g<1>{iso_now}\g<3>", event_name)
         event_name = re.sub(
-            r'(^|[^0-9a-zA-Z]+)(\$now)($|[^0-9a-zA-Z]+)',
-            r'\g<1>{}\g<3>'.format(iso_now),
-            event_name
-        )
-        event_name = re.sub(
-            r'(^|[^0-9a-zA-Z]+)(\$label)($|[^0-9a-zA-Z]+)',
-            r'\g<1>{}\g<3>'.format(self._handle_py_ver_compat_for_input_str(label_name)),
-            event_name
+            r"(^|[^0-9a-zA-Z]+)(\$label)($|[^0-9a-zA-Z]+)", rf"\g<1>{self._handle_py_ver_compat_for_input_str(label_name)}\g<3>", event_name
         )
 
         return event_name
@@ -94,7 +87,7 @@ class TimerConnector(BaseConnector):
         event_name = self._format_event_name()
 
         # no suitable investigative function found for using in test connectivity, hence, keeping it as it is
-        self.save_progress("Event Name: {}".format(event_name))
+        self.save_progress(f"Event Name: {event_name}")
 
         self.save_progress("Test Connectivity Passed")
 
@@ -104,24 +97,15 @@ class TimerConnector(BaseConnector):
         action_result = self.add_action_result(ActionResult(dict(param)))
         event_name = self._format_event_name()
 
-        container = {
-            'name': event_name,
-            'run_automation': True,
-            'severity': self._severity,
-            'sensitivity': self._sensitivity
-        }
+        container = {"name": event_name, "run_automation": True, "severity": self._severity, "sensitivity": self._sensitivity}
         self.save_progress("saving the container")
         ret_val, message, container_id = self.save_container(container)
         if phantom.is_fail(ret_val):
-            return action_result.set_status(
-                phantom.APP_ERROR,
-                "Unable to create container: {}".format(message)
-            )
+            return action_result.set_status(phantom.APP_ERROR, f"Unable to create container: {message}")
 
         return action_result.set_status(phantom.APP_SUCCESS, "Created Container")
 
     def handle_action(self, param):
-
         ret_val = phantom.APP_SUCCESS
 
         # Get the action that we are supposed to execute for this App Run
@@ -129,16 +113,15 @@ class TimerConnector(BaseConnector):
 
         self.debug_print("action_id", self.get_action_identifier())
 
-        if action_id == 'on_poll':
+        if action_id == "on_poll":
             ret_val = self._handle_on_poll(param)
-        elif action_id == 'test_connectivity':
+        elif action_id == "test_connectivity":
             ret_val = self._handle_test_connectivity(param)
 
         return ret_val
 
 
-if __name__ == '__main__':
-
+if __name__ == "__main__":
     import argparse
 
     import pudb
@@ -147,10 +130,10 @@ if __name__ == '__main__':
 
     argparser = argparse.ArgumentParser()
 
-    argparser.add_argument('input_test_json', help='Input Test JSON file')
-    argparser.add_argument('-u', '--username', help='username', required=False)
-    argparser.add_argument('-p', '--password', help='password', required=False)
-    argparser.add_argument('-v', '--verify', action='store_true', help='verify', required=False, default=False)
+    argparser.add_argument("input_test_json", help="Input Test JSON file")
+    argparser.add_argument("-u", "--username", help="username", required=False)
+    argparser.add_argument("-p", "--password", help="password", required=False)
+    argparser.add_argument("-v", "--verify", action="store_true", help="verify", required=False, default=False)
 
     args = argparser.parse_args()
     session_id = None
@@ -160,35 +143,35 @@ if __name__ == '__main__':
     verify = args.verify
     timeout = 30
 
-    if (username is not None and password is None):
-
+    if username is not None and password is None:
         # User specified a username but not a password, so ask
         import getpass
+
         password = getpass.getpass("Password: ")
 
-    if (username and password):
+    if username and password:
         try:
             print("Accessing the Login page")
             r = requests.get("https://127.0.0.1/login", verify=verify, timeout=timeout)
-            csrftoken = r.cookies['csrftoken']
+            csrftoken = r.cookies["csrftoken"]
 
             data = dict()
-            data['username'] = username
-            data['password'] = password
-            data['csrfmiddlewaretoken'] = csrftoken
+            data["username"] = username
+            data["password"] = password
+            data["csrfmiddlewaretoken"] = csrftoken
 
             headers = dict()
-            headers['Cookie'] = 'csrftoken=' + csrftoken
-            headers['Referer'] = 'https://127.0.0.1/login'
+            headers["Cookie"] = "csrftoken=" + csrftoken
+            headers["Referer"] = "https://127.0.0.1/login"
 
             print("Logging into Platform to get the session id")
             r2 = requests.post("https://127.0.0.1/login", verify=verify, data=data, headers=headers, timeout=timeout)
-            session_id = r2.cookies['sessionid']
+            session_id = r2.cookies["sessionid"]
         except Exception as e:
             print("Unable to get session id from the platfrom. Error: " + str(e))
             sys.exit(1)
 
-    if (len(sys.argv) < 2):
+    if len(sys.argv) < 2:
         print("No test json specified as input")
         sys.exit(0)
 
@@ -200,8 +183,8 @@ if __name__ == '__main__':
         connector = TimerConnector()
         connector.print_progress_message = True
 
-        if (session_id is not None):
-            in_json['user_session_token'] = session_id
+        if session_id is not None:
+            in_json["user_session_token"] = session_id
 
         ret_val = connector._handle_action(json.dumps(in_json), None)
         print(json.dumps(json.loads(ret_val), indent=4))
