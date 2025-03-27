@@ -1,18 +1,19 @@
 Splunk SOAR Timer
-Copyright (c) 2018-2024 Splunk Inc.
+Copyright (c) 2018-2025 Splunk Inc.
 
-Third-party Software Attributions:
+Third Party Software Attributions:
 
-Library: beautifulsoup4
+Name: beautifulsoup4
 Version: 4.9.1
+Author: Leonard Richardson
 License: MIT
-Copyright 2004-2017 Leonard Richardson
-Copyright 2004-2019 Leonard Richardson
-Copyright 2018 Isaac Muse
 
-Library: pytz
+Name: pytz
 Version: 2021.1
+Author: Stuart Bishop
 License: MIT
-License: Zope
-Copyright 1987-2006 implementation only works for dates between
-Copyright 2003-2019 Stuart Bishop <stuart@stuartbishop.net>
+
+Name: soupsieve
+Version: 2.6
+Author:
+License:
