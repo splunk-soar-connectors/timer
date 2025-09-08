@@ -104,12 +104,7 @@
         }
     ],
     "pip39_dependencies": {
-        "wheel": [
-            {
-                "module": "pytz",
-                "input_file": "wheels/shared/pytz-2025.2-py2.py3-none-any.whl"
-            }
-        ]
+        "wheel": []
     },
     "pip313_dependencies": {
         "wheel": [
