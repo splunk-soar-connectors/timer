@@ -15,7 +15,7 @@
     "package_name": "phantom_timer",
     "main_module": "timer_connector.py",
     "min_phantom_version": "4.9.39220",
-    "python_version": "3.9",
+    "python_version": "3.9, 3.13",
     "fips_compliant": true,
     "latest_tested_versions": [
         ""
@@ -104,19 +104,9 @@
         }
     ],
     "pip39_dependencies": {
-        "wheel": [
-            {
-                "module": "pytz",
-                "input_file": "wheels/shared/pytz-2021.1-py2.py3-none-any.whl"
-            }
-        ]
+        "wheel": []
     },
     "pip313_dependencies": {
-        "wheel": [
-            {
-                "module": "pytz",
-                "input_file": "wheels/shared/pytz-2021.1-py2.py3-none-any.whl"
-            }
-        ]
+        "wheel": []
     }
 }

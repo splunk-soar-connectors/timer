@@ -1,2 +1,0 @@
-beautifulsoup4==4.9.1
-pytz==2021.1
