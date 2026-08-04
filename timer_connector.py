@@ -74,10 +74,11 @@ class TimerConnector(BaseConnector):
 
         iso_now = datetime.datetime.now(pytz.utc).isoformat()
         label_name = config.get("ingest", {}).get("container_label", "")
+        label_name = self._handle_py_ver_compat_for_input_str(label_name)
 
         event_name = re.sub(r"(^|[^0-9a-zA-Z]+)(\$now)($|[^0-9a-zA-Z]+)", rf"\g<1>{iso_now}\g<3>", event_name)
         event_name = re.sub(
-            r"(^|[^0-9a-zA-Z]+)(\$label)($|[^0-9a-zA-Z]+)", rf"\g<1>{self._handle_py_ver_compat_for_input_str(label_name)}\g<3>", event_name
+            r"(^|[^0-9a-zA-Z]+)(\$label)($|[^0-9a-zA-Z]+)", lambda match: f"{match.group(1)}{label_name}{match.group(3)}", event_name
         )
 
         return event_name
