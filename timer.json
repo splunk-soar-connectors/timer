@@ -9,7 +9,7 @@
     "product_name": "Timer",
     "product_version_regex": ".*",
     "publisher": "Splunk",
-    "license": "Copyright (c) 2018-2025 Splunk Inc.",
+    "license": "Copyright (c) 2018-2026 Splunk Inc.",
     "app_version": "2.0.22",
     "utctime_updated": "2025-09-08T22:53:50.002947Z",
     "package_name": "phantom_timer",

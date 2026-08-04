@@ -1,9 +1,9 @@
 # Timer
 
-Publisher: Splunk \
-Connector Version: 2.0.22 \
-Product Vendor: Phantom \
-Product Name: Timer \
+Publisher: Splunk <br>
+Connector Version: 2.0.22 <br>
+Product Vendor: Phantom <br>
+Product Name: Timer <br>
 Minimum Product Version: 4.9.39220
 
 This app will generate an empty event which can be used to kick off a playbook at scheduled intervals
@@ -32,14 +32,14 @@ VARIABLE | REQUIRED | TYPE | DESCRIPTION
 
 ### Supported Actions
 
-[test connectivity](#action-test-connectivity) - Validate the asset configuration for connectivity using supplied configuration \
+[test connectivity](#action-test-connectivity) - Validate the asset configuration for connectivity using supplied configuration <br>
 [on poll](#action-on-poll) - Create one empty event to kick off a playbook
 
 ## action: 'test connectivity'
 
 Validate the asset configuration for connectivity using supplied configuration
 
-Type: **test** \
+Type: **test** <br>
 Read only: **True**
 
 #### Action Parameters
@@ -54,7 +54,7 @@ No Output
 
 Create one empty event to kick off a playbook
 
-Type: **ingest** \
+Type: **ingest** <br>
 Read only: **True**
 
 #### Action Parameters
@@ -75,7 +75,7 @@ ______________________________________________________________________
 
 Auto-generated Splunk SOAR Connector documentation.
 
-Copyright 2025 Splunk Inc.
+Copyright 2026 Splunk Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

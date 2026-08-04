@@ -1,6 +1,6 @@
 # File: timer_connector.py
 #
-# Copyright (c) 2018-2025 Splunk Inc.
+# Copyright (c) 2018-2026 Splunk Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -99,7 +99,7 @@ class TimerConnector(BaseConnector):
 
         container = {"name": event_name, "run_automation": True, "severity": self._severity, "sensitivity": self._sensitivity}
         self.save_progress("saving the container")
-        ret_val, message, container_id = self.save_container(container)
+        ret_val, message, _container_id = self.save_container(container)
         if phantom.is_fail(ret_val):
             return action_result.set_status(phantom.APP_ERROR, f"Unable to create container: {message}")
 
