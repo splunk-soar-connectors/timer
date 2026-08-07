@@ -1,7 +1,7 @@
 # Timer
 
 Publisher: Splunk <br>
-Connector Version: 2.0.22 <br>
+Connector Version: 2.0.23 <br>
 Product Vendor: Phantom <br>
 Product Name: Timer <br>
 Minimum Product Version: 4.9.39220
