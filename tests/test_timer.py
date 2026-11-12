@@ -1,12 +1,25 @@
+# Copyright (c) 2026 Splunk Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """Behavior and contract checks for the SDK Timer connector."""
 
 import json
 import unittest
 from datetime import UTC, datetime
-from pathlib import Path
 from unittest.mock import patch
 
-from src.actions.on_poll import format_event_name
+from src.actions.on_poll import PollParams, format_event_name
 from src.app import app
 from src.asset import Asset
 from src.test_connectivity import logger
@@ -71,16 +84,14 @@ class TimerTests(unittest.TestCase):
         save.assert_not_called()
         self.assertTrue(result.get_status())
 
-    def test_poll_manifest_keeps_numeric_ignored_parameters_and_no_data_fields(self):
-        manifest = json.loads(Path("timer.json").read_text(encoding="utf-8"))
-        poll = next(action for action in manifest["actions"] if action["identifier"] == "on_poll")
-        self.assertEqual(poll["type"], "ingest")
+    def test_poll_params_keep_numeric_ignored_parameters_and_asset_defaults(self):
+        expected_parameters = ["start_time", "end_time", "container_id", "container_count", "artifact_count"]
         self.assertEqual(
-            list(poll["parameters"]),
-            ["start_time", "end_time", "container_id", "container_count", "artifact_count"],
+            list(PollParams.model_fields),
+            expected_parameters,
         )
-        self.assertTrue(all(field["data_type"] == "numeric" for field in poll["parameters"].values()))
-        self.assertFalse(any(field["data_path"].startswith("action_result.data") for field in poll["output"]))
+        self.assertTrue(all(field.annotation == float | None for field in PollParams.model_fields.values()))
+        self.assertTrue(all(not field.is_required() for field in PollParams.model_fields.values()))
         self.assertEqual(Asset.model_validate({}).severity, "medium")
         self.assertEqual(Asset.model_validate({}).sensitivity, "amber")
 

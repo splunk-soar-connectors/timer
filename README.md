@@ -32,23 +32,8 @@ VARIABLE | REQUIRED | TYPE | DESCRIPTION
 
 ### Supported Actions
 
-[test connectivity](#action-test-connectivity) - Validate the asset configuration for connectivity using supplied configuration <br>
-[on poll](#action-on-poll) - Create one empty event to kick off a playbook
-
-## action: 'test connectivity'
-
-Validate the asset configuration for connectivity using supplied configuration
-
-Type: **test** <br>
-Read only: **True**
-
-#### Action Parameters
-
-No parameters are required for this action
-
-#### Action Output
-
-No Output
+[on poll](#action-on-poll) - Create one empty event to kick off a playbook <br>
+[test connectivity](#action-test-connectivity) - Validate the asset configuration for connectivity using supplied configuration.
 
 ## action: 'on poll'
 
@@ -69,7 +54,39 @@ PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 
 #### Action Output
 
-No Output
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string | | success failure |
+action_result.message | string | | |
+action_result.parameter.start_time | numeric | | |
+action_result.parameter.end_time | numeric | | |
+action_result.parameter.container_id | numeric | | |
+action_result.parameter.container_count | numeric | | |
+action_result.parameter.artifact_count | numeric | | |
+summary.total_objects | numeric | | 1 |
+summary.total_objects_successful | numeric | | 1 |
+
+## action: 'test connectivity'
+
+Validate the asset configuration for connectivity using supplied configuration.
+
+Type: **test** <br>
+Read only: **True**
+
+Basic test for app.
+
+#### Action Parameters
+
+No parameters are required for this action
+
+#### Action Output
+
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string | | success failure |
+action_result.message | string | | |
+summary.total_objects | numeric | | 1 |
+summary.total_objects_successful | numeric | | 1 |
 
 ______________________________________________________________________
 
