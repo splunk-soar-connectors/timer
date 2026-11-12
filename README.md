@@ -4,7 +4,7 @@ Publisher: Splunk <br>
 Connector Version: 2.0.23 <br>
 Product Vendor: Phantom <br>
 Product Name: Timer <br>
-Minimum Product Version: 4.9.39220
+Minimum Product Version: 7.0.0
 
 This app will generate an empty event which can be used to kick off a playbook at scheduled intervals
 

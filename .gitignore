@@ -1,3 +1,9 @@
 *.pyc
 *.bak*
 .pylintrc
+.venv/
+.ruff_cache/
+.pytest_cache/
+dist/
+build/
+*.tgz
