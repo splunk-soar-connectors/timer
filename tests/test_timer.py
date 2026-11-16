@@ -19,7 +19,10 @@ import unittest
 from datetime import UTC, datetime
 from unittest.mock import patch
 
-from src.actions.on_poll import PollParams, format_event_name
+from pydantic import ValidationError
+from soar_sdk.params import OnPollParams
+
+from src.actions.on_poll import format_event_name
 from src.app import app
 from src.asset import Asset
 from src.test_connectivity import logger
@@ -53,13 +56,13 @@ class TimerTests(unittest.TestCase):
             result = self.run_action(
                 "on_poll",
                 label=r"Back\slash",
-                parameters={"container_id": 7, "container_count": 1.5},
+                parameters={"container_id": "7", "container_count": 1},
                 severity="high",
                 sensitivity="red",
             )
         save.assert_called_once_with({"name": r"Back\slash event", "run_automation": True, "severity": "high", "sensitivity": "red"})
         self.assertTrue(result.get_status())
-        self.assertEqual(result.get_message(), "Created Container")
+        self.assertEqual(result.get_message(), "Polling complete")
         self.assertEqual(result.get_data(), [])
 
     def test_poll_uses_defaults_and_reports_save_failure(self):
@@ -67,7 +70,7 @@ class TimerTests(unittest.TestCase):
             result = self.run_action("on_poll", event_name="scheduled", label="")
         save.assert_called_once_with({"name": "scheduled", "run_automation": True, "severity": "medium", "sensitivity": "amber"})
         self.assertFalse(result.get_status())
-        self.assertEqual(result.get_message(), "Unable to create container: database unavailable")
+        self.assertEqual(result.get_message(), "Action failure in on poll: Failed to create container: database unavailable")
         self.assertEqual(result.get_data(), [])
 
     def test_poll_handles_missing_ingest_label(self):
@@ -84,14 +87,20 @@ class TimerTests(unittest.TestCase):
         save.assert_not_called()
         self.assertTrue(result.get_status())
 
-    def test_poll_params_keep_numeric_ignored_parameters_and_asset_defaults(self):
-        expected_parameters = ["start_time", "end_time", "container_id", "container_count", "artifact_count"]
+    def test_poll_uses_sdk_parameter_types_and_asset_defaults(self):
+        expected_parameters = ["start_time", "end_time", "container_count", "artifact_count", "container_id"]
         self.assertEqual(
-            list(PollParams.model_fields),
+            list(OnPollParams.model_fields),
             expected_parameters,
         )
-        self.assertTrue(all(field.annotation == float | None for field in PollParams.model_fields.values()))
-        self.assertTrue(all(not field.is_required() for field in PollParams.model_fields.values()))
+        for field_name in ("start_time", "end_time", "container_count", "artifact_count"):
+            self.assertEqual(OnPollParams.model_fields[field_name].annotation, int | None)
+        self.assertEqual(OnPollParams.model_fields["container_id"].annotation, str | None)
+        self.assertTrue(all(not field.is_required() for field in OnPollParams.model_fields.values()))
+        with self.assertRaises(ValidationError):
+            OnPollParams.model_validate({"container_count": 1.5})
+        with self.assertRaises(ValidationError):
+            OnPollParams.model_validate({"container_id": 7})
         self.assertEqual(Asset.model_validate({}).severity, "medium")
         self.assertEqual(Asset.model_validate({}).sensitivity, "amber")
 

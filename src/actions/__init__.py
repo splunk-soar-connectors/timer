@@ -13,25 +13,20 @@
 # limitations under the License.
 """Register Timer actions."""
 
-from soar_sdk.action_results import ActionOutput
+from collections.abc import Iterator
+
 from soar_sdk.app import App
+from soar_sdk.models.container import Container
+from soar_sdk.params import OnPollParams
 
 from ..asset import Asset
-from .on_poll import PollParams, run_on_poll
+from .on_poll import run_on_poll
 
 
 def register_actions(app: App) -> App:
-    def on_poll(params: PollParams, asset: Asset):
-        return run_on_poll(params, asset, app)
+    @app.on_poll()
+    def on_poll(params: OnPollParams, asset: Asset) -> Iterator[Container]:
+        """Create one empty event to kick off a playbook."""
+        yield from run_on_poll(params, asset, app)
 
-    app.register_action(
-        action=on_poll,
-        name="on poll",
-        identifier="on_poll",
-        description="Create one empty event to kick off a playbook",
-        action_type="ingest",
-        read_only=True,
-        params_class=PollParams,
-        output_class=ActionOutput,
-    )
     return app

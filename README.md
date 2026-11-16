@@ -32,39 +32,31 @@ VARIABLE | REQUIRED | TYPE | DESCRIPTION
 
 ### Supported Actions
 
-[on poll](#action-on-poll) - Create one empty event to kick off a playbook <br>
+[on poll](#action-on-poll) - Create one empty event to kick off a playbook. <br>
 [test connectivity](#action-test-connectivity) - Validate the asset configuration for connectivity using supplied configuration.
 
 ## action: 'on poll'
 
-Create one empty event to kick off a playbook
+Create one empty event to kick off a playbook.
 
 Type: **ingest** <br>
 Read only: **True**
+
+Callback action for the on_poll ingest functionality
 
 #### Action Parameters
 
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**start_time** | optional | Parameter Ignored in this app | numeric | |
-**end_time** | optional | Parameter Ignored in this app | numeric | |
-**container_id** | optional | Parameter Ignored in this app | numeric | |
-**container_count** | optional | Parameter Ignored in this app | numeric | |
-**artifact_count** | optional | Parameter Ignored in this app | numeric | |
+**start_time** | optional | Start of time range, in epoch time (milliseconds). | numeric | |
+**end_time** | optional | End of time range, in epoch time (milliseconds). | numeric | |
+**container_count** | optional | Maximum number of container records to query for. | numeric | |
+**artifact_count** | optional | Maximum number of artifact records to query for. | numeric | |
+**container_id** | optional | Comma-separated list of container IDs to limit the ingestion to. | string | |
 
 #### Action Output
 
-DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
---------- | ---- | -------- | --------------
-action_result.status | string | | success failure |
-action_result.message | string | | |
-action_result.parameter.start_time | numeric | | |
-action_result.parameter.end_time | numeric | | |
-action_result.parameter.container_id | numeric | | |
-action_result.parameter.container_count | numeric | | |
-action_result.parameter.artifact_count | numeric | | |
-summary.total_objects | numeric | | 1 |
-summary.total_objects_successful | numeric | | 1 |
+No Output
 
 ## action: 'test connectivity'
 
